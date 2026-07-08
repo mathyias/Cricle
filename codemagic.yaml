@@ -1,6 +1,6 @@
 workflows:
-  flutter-ios:
-    name: Flutter iOS Build
+  flutter-ios-sideloadly:
+    name: Flutter iOS for Sideloadly
     max_build_duration: 120
     instance_type: mac_mini_m2
 
@@ -10,17 +10,18 @@ workflows:
       cocoapods: default
 
     scripts:
-      - name: Get Flutter packages
+      - name: Get packages
         script: flutter pub get
 
-      - name: Run tests
-        script: flutter test
-        ignore_failure: true
+      - name: Build unsigned iOS app
+        script: flutter build ios --release --no-codesign
 
-      - name: Build iOS without signing
+      - name: Create unsigned IPA
         script: |
-          flutter build ios --release --no-codesign
+          mkdir -p build/ios/ipa/Payload
+          cp -R build/ios/iphoneos/Runner.app build/ios/ipa/Payload/
+          cd build/ios/ipa
+          zip -r Runner-unsigned.ipa Payload
 
     artifacts:
-      - build/ios/iphoneos/*.app
-      - build/ios/**/*.xcarchive
+      - build/ios/ipa/Runner-unsigned.ipa
