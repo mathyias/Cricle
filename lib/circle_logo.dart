@@ -3,7 +3,10 @@ import 'package:flutter/material.dart';
 
 class CircleLogo extends StatefulWidget {
   final double size;
-  const CircleLogo({super.key, this.size = 160});
+  // Dodatkowy obrót pierścieni (nie rusza samym logo na środku) - używany
+  // przez animację startową, żeby pierścienie mogły przyspieszać.
+  final Animation<double>? extraSpin;
+  const CircleLogo({super.key, this.size = 160, this.extraSpin});
 
   @override
   State<CircleLogo> createState() => _CircleLogoState();
@@ -72,11 +75,14 @@ class _CircleLogoState extends State<CircleLogo>
       child: Stack(
         alignment: Alignment.center,
         children: [
-          // Pierścień 1 (wewnętrzny) - obrót w prawo
+          // Pierścień 1 (wewnętrzny) - obrót w prawo (+ ewentualne przyspieszenie)
           AnimatedBuilder(
-            animation: _ring1Controller,
+            animation: widget.extraSpin != null
+                ? Listenable.merge([_ring1Controller, widget.extraSpin])
+                : _ring1Controller,
             builder: (context, _) => Transform.rotate(
-              angle: _ring1Controller.value * 2 * math.pi,
+              angle: _ring1Controller.value * 2 * math.pi +
+                  (widget.extraSpin?.value ?? 0),
               child: CustomPaint(
                 size: Size(ringAreaSize * 0.80, ringAreaSize * 0.80),
                 painter: _RingPainter(),
@@ -84,11 +90,14 @@ class _CircleLogoState extends State<CircleLogo>
             ),
           ),
 
-          // Pierścień 2 (środkowy) - obrót w lewo
+          // Pierścień 2 (środkowy) - obrót w lewo (+ ewentualne przyspieszenie)
           AnimatedBuilder(
-            animation: _ring2Controller,
+            animation: widget.extraSpin != null
+                ? Listenable.merge([_ring2Controller, widget.extraSpin])
+                : _ring2Controller,
             builder: (context, _) => Transform.rotate(
-              angle: -_ring2Controller.value * 2 * math.pi,
+              angle: -_ring2Controller.value * 2 * math.pi -
+                  (widget.extraSpin?.value ?? 0),
               child: CustomPaint(
                 size: Size(ringAreaSize * 0.90, ringAreaSize * 0.90),
                 painter: _RingPainter(),
@@ -96,11 +105,14 @@ class _CircleLogoState extends State<CircleLogo>
             ),
           ),
 
-          // Pierścień 3 (zewnętrzny) - obrót w prawo, wolniej
+          // Pierścień 3 (zewnętrzny) - obrót w prawo, wolniej (+ przyspieszenie)
           AnimatedBuilder(
-            animation: _ring3Controller,
+            animation: widget.extraSpin != null
+                ? Listenable.merge([_ring3Controller, widget.extraSpin])
+                : _ring3Controller,
             builder: (context, _) => Transform.rotate(
-              angle: _ring3Controller.value * 2 * math.pi,
+              angle: _ring3Controller.value * 2 * math.pi +
+                  (widget.extraSpin?.value ?? 0) * 0.85,
               child: CustomPaint(
                 size: Size(ringAreaSize * 1.0, ringAreaSize * 1.0),
                 painter: _RingPainter(),

@@ -46,6 +46,7 @@ class _MainNavState extends State<MainNav> {
       padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
       child: GlassContainer(
         borderRadius: 30,
+        accentBar: false,
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -58,9 +59,12 @@ class _MainNavState extends State<MainNav> {
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 decoration: BoxDecoration(
                   color: selected
-                      ? Colors.white.withValues(alpha: 0.25)
+                      ? CircuitColors.red.withValues(alpha: 0.28)
                       : Colors.transparent,
                   borderRadius: BorderRadius.circular(20),
+                  border: selected
+                      ? Border.all(color: CircuitColors.red.withValues(alpha: 0.4), width: 1)
+                      : null,
                 ),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -104,14 +108,7 @@ class _FeedScreenState extends State<FeedScreen> {
     return ListView(
       padding: const EdgeInsets.fromLTRB(20, 20, 20, 120),
       children: [
-        const Text(
-          'Feed',
-          style: TextStyle(
-            fontSize: 28,
-            fontWeight: FontWeight.w700,
-            color: Colors.white,
-          ),
-        ),
+        const SectionHeader(title: 'Feed'),
         const SizedBox(height: 16),
         for (final post in mockPosts)
           GlassContainer(
@@ -123,9 +120,8 @@ class _FeedScreenState extends State<FeedScreen> {
               children: [
                 Row(
                   children: [
-                    CircleAvatar(
+                    RingAvatar(
                       radius: 20,
-                      backgroundColor: Colors.white.withValues(alpha: 0.3),
                       child: Text(post.avatarEmoji, style: const TextStyle(fontSize: 20)),
                     ),
                     const SizedBox(width: 12),
@@ -165,7 +161,7 @@ class _FeedScreenState extends State<FeedScreen> {
                                 ? CupertinoIcons.heart_fill
                                 : CupertinoIcons.heart,
                             size: 18,
-                            color: post.likedByMe ? Colors.pinkAccent : Colors.white,
+                            color: post.likedByMe ? CircuitColors.red : Colors.white,
                           ),
                           const SizedBox(width: 6),
                           Text('${post.likes}',
@@ -207,14 +203,7 @@ class DiscoverScreen extends StatelessWidget {
         if (i == 0) {
           return const Padding(
             padding: EdgeInsets.only(bottom: 4),
-            child: Text(
-              'Odkrywaj',
-              style: TextStyle(
-                fontSize: 28,
-                fontWeight: FontWeight.w700,
-                color: Colors.white,
-              ),
-            ),
+            child: SectionHeader(title: 'Odkrywaj'),
           );
         }
         final group = mockGroups[i - 1];
@@ -225,7 +214,19 @@ class DiscoverScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(group.emoji, style: const TextStyle(fontSize: 32)),
+              Container(
+                width: 44,
+                height: 44,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: CircuitColors.red.withValues(alpha: 0.45),
+                    width: 1.4,
+                  ),
+                ),
+                child: Text(group.emoji, style: const TextStyle(fontSize: 22)),
+              ),
               Text(
                 group.name,
                 style: const TextStyle(
@@ -258,14 +259,7 @@ class ChatScreen extends StatelessWidget {
     return ListView(
       padding: const EdgeInsets.fromLTRB(20, 20, 20, 120),
       children: [
-        const Text(
-          'Czat',
-          style: TextStyle(
-            fontSize: 28,
-            fontWeight: FontWeight.w700,
-            color: Colors.white,
-          ),
-        ),
+        const SectionHeader(title: 'Czat'),
         const SizedBox(height: 16),
         for (final chat in mockChats)
           GlassContainer(
@@ -274,9 +268,9 @@ class ChatScreen extends StatelessWidget {
             padding: const EdgeInsets.all(14),
             child: Row(
               children: [
-                CircleAvatar(
+                RingAvatar(
                   radius: 22,
-                  backgroundColor: Colors.white.withValues(alpha: 0.3),
+                  active: chat.unread,
                   child: Text(chat.emoji, style: const TextStyle(fontSize: 22)),
                 ),
                 const SizedBox(width: 14),
@@ -305,28 +299,12 @@ class ChatScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Text(
-                      chat.time,
-                      style: TextStyle(
-                        color: Colors.white.withValues(alpha: 0.7),
-                        fontSize: 11,
-                      ),
-                    ),
-                    if (chat.unread) ...[
-                      const SizedBox(height: 6),
-                      Container(
-                        width: 8,
-                        height: 8,
-                        decoration: const BoxDecoration(
-                          color: Colors.pinkAccent,
-                          shape: BoxShape.circle,
-                        ),
-                      ),
-                    ],
-                  ],
+                Text(
+                  chat.time,
+                  style: TextStyle(
+                    color: Colors.white.withValues(alpha: 0.7),
+                    fontSize: 11,
+                  ),
                 ),
               ],
             ),
@@ -345,24 +323,17 @@ class ProfileScreen extends StatelessWidget {
     return ListView(
       padding: const EdgeInsets.fromLTRB(20, 20, 20, 120),
       children: [
-        const Text(
-          'Profil',
-          style: TextStyle(
-            fontSize: 28,
-            fontWeight: FontWeight.w700,
-            color: Colors.white,
-          ),
-        ),
+        const SectionHeader(title: 'Profil'),
         const SizedBox(height: 20),
         GlassContainer(
           borderRadius: 24,
           padding: const EdgeInsets.all(24),
           child: Column(
             children: [
-              CircleAvatar(
+              const RingAvatar(
                 radius: 40,
-                backgroundColor: Colors.white.withValues(alpha: 0.3),
-                child: const Text('🙂', style: TextStyle(fontSize: 40)),
+                active: true,
+                child: Text('🙂', style: TextStyle(fontSize: 40)),
               ),
               const SizedBox(height: 14),
               const Text(

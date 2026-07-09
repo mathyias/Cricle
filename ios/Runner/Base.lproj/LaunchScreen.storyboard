@@ -16,11 +16,17 @@
                     <view key="view" contentMode="scaleToFill" id="Ze5-6b-2t3">
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFill" image="LaunchBackground" translatesAutoresizingMaskIntoConstraints="NO" id="BG0-bg-0000">
+                            </imageView>
                             <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" image="LaunchImage" translatesAutoresizingMaskIntoConstraints="NO" id="YRO-k0-Ey4">
                             </imageView>
                         </subviews>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" red="0.929" green="0.902" blue="0.863" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstItem="BG0-bg-0000" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="BG0-lead-01"/>
+                            <constraint firstItem="BG0-bg-0000" firstAttribute="trailing" secondItem="Ze5-6b-2t3" secondAttribute="trailing" id="BG0-trail-01"/>
+                            <constraint firstItem="BG0-bg-0000" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="BG0-top-01"/>
+                            <constraint firstItem="BG0-bg-0000" firstAttribute="bottom" secondItem="Ze5-6b-2t3" secondAttribute="bottom" id="BG0-bot-01"/>
                             <constraint firstItem="YRO-k0-Ey4" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="1a2-6s-vTC"/>
                             <constraint firstItem="YRO-k0-Ey4" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="4X2-HB-R7a"/>
                         </constraints>
@@ -32,6 +38,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="LaunchImage" width="168" height="185"/>
+        <image name="LaunchImage" width="200" height="200"/>
+        <image name="LaunchBackground" width="1290" height="2796"/>
     </resources>
 </document>
