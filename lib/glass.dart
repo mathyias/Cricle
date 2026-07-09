@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 
+// Tło z gradientem + technicznymi liniami/kształtami - używane na każdym ekranie
 class AppBackground extends StatelessWidget {
   final Widget child;
   const AppBackground({super.key, required this.child});
@@ -12,48 +13,98 @@ class AppBackground extends StatelessWidget {
         Container(
           decoration: const BoxDecoration(
             gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
               colors: [
-                Color(0xFF05060A),
-                Color(0xFF0B0F1C),
-                Color(0xFF03040A),
+                Color(0xFFB8E3E8),
+                Color(0xFFEDE6DC),
+                Color(0xFFE8CBAE),
               ],
             ),
           ),
         ),
-        Positioned(
-          top: -100,
-          left: -80,
-          child: _blurCircle(280, const Color(0xFF6C5CE7).withValues(alpha: 0.28)),
-        ),
-        Positioned(
-          bottom: -120,
-          right: -80,
-          child: _blurCircle(300, const Color(0xFF00E5FF).withValues(alpha: 0.20)),
-        ),
-        Positioned(
-          top: 200,
-          right: -60,
-          child: _blurCircle(180, const Color(0xFFFF3D9A).withValues(alpha: 0.14)),
+        Positioned.fill(
+          child: CustomPaint(
+            painter: _CircuitLinesPainter(),
+          ),
         ),
         child,
       ],
     );
   }
+}
 
-  Widget _blurCircle(double size, Color color) {
-    return ClipRRect(
-      child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 70, sigmaY: 70),
-        child: Container(
-          width: size,
-          height: size,
-          decoration: BoxDecoration(shape: BoxShape.circle, color: color),
-        ),
-      ),
+class _CircuitLinesPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = Colors.black.withValues(alpha: 0.07)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1.1;
+
+    // duże dekoracyjne okręgi koncentryczne (lewy górny róg)
+    canvas.drawCircle(Offset(size.width * 0.12, size.height * 0.10), 70, paint);
+    canvas.drawCircle(Offset(size.width * 0.12, size.height * 0.10), 115, paint);
+    canvas.drawCircle(Offset(size.width * 0.12, size.height * 0.10), 165, paint);
+
+    // duże dekoracyjne okręgi (prawy dolny róg)
+    canvas.drawCircle(Offset(size.width * 0.9, size.height * 0.85), 90, paint);
+    canvas.drawCircle(Offset(size.width * 0.9, size.height * 0.85), 140, paint);
+
+    // "obwód" po lewej - kanciasty kształt jak schemat techniczny
+    final path1 = Path()
+      ..moveTo(0, size.height * 0.28)
+      ..lineTo(size.width * 0.22, size.height * 0.28)
+      ..lineTo(size.width * 0.22, size.height * 0.40)
+      ..lineTo(size.width * 0.14, size.height * 0.40)
+      ..lineTo(size.width * 0.14, size.height * 0.50)
+      ..lineTo(size.width * 0.30, size.height * 0.50);
+    canvas.drawPath(path1, paint);
+
+    // drugi kanciasty kształt po prawej
+    final path2 = Path()
+      ..moveTo(size.width, size.height * 0.55)
+      ..lineTo(size.width * 0.76, size.height * 0.55)
+      ..lineTo(size.width * 0.76, size.height * 0.42)
+      ..lineTo(size.width * 0.85, size.height * 0.42);
+    canvas.drawPath(path2, paint);
+
+    // mały okrąg z "trzonkiem" - jak ikona zaworu/pinu
+    final pinCenter = Offset(size.width * 0.82, size.height * 0.18);
+    canvas.drawCircle(pinCenter, 22, paint);
+    canvas.drawLine(
+      pinCenter,
+      Offset(pinCenter.dx, pinCenter.dy - 40),
+      paint,
+    );
+
+    // przerywana linia ukośna w dolnej części
+    _drawDashedLine(
+      canvas,
+      Offset(size.width * 0.05, size.height * 0.95),
+      Offset(size.width * 0.35, size.height * 0.78),
+      paint,
     );
   }
+
+  void _drawDashedLine(Canvas canvas, Offset start, Offset end, Paint paint) {
+    const dashWidth = 6.0;
+    const dashSpace = 5.0;
+    final distance = (end - start).distance;
+    final direction = (end - start) / distance;
+    double covered = 0;
+    while (covered < distance) {
+      final segStart = start + direction * covered;
+      final segEnd = start + direction * _mathMin(covered + dashWidth, distance);
+      canvas.drawLine(segStart, segEnd, paint);
+      covered += dashWidth + dashSpace;
+    }
+  }
+
+  double _mathMin(double a, double b) => a < b ? a : b;
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
 
 // Uniwersalny szklany kontener (karty, panele)

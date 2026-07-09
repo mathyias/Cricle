@@ -24,40 +24,26 @@ class WelcomeScreen extends StatelessWidget {
                       MaterialPageRoute(builder: (_) => const MainNav()),
                     );
                   },
-                  child: const CircleLogo(size: 180),
+                  child: const CircleLogo(size: 220),
                 ),
 
-                const SizedBox(height: 44),
+                const SizedBox(height: 12),
 
-                ShaderMask(
-                  shaderCallback: (bounds) => const LinearGradient(
-                    colors: [Color(0xFF00E5FF), Color(0xFF9C6BFF)],
-                  ).createShader(bounds),
-                  child: const Text(
-                    'CIRCLE',
-                    style: TextStyle(
-                      fontSize: 42,
-                      fontWeight: FontWeight.w800,
-                      color: Colors.white,
-                      letterSpacing: 6,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 16),
                 Text(
-                  'Dołącz do kręgu.\nOdkryj, co ukryte.',
+                  'Wszystko widzą. Wszystko wiedzą.',
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontSize: 15,
-                    color: Colors.white.withValues(alpha: 0.55),
-                    height: 1.6,
-                    letterSpacing: 0.5,
+                    fontSize: 22,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white.withValues(alpha: 0.9),
+                    letterSpacing: 0.4,
+                    height: 1.4,
                   ),
                 ),
 
                 const Spacer(flex: 2),
 
-                _pulsingHint(),
+                _tapHint(),
 
                 const SizedBox(height: 48),
               ],
@@ -68,13 +54,13 @@ class WelcomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _pulsingHint() {
+  Widget _tapHint() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Icon(
           CupertinoIcons.hand_draw_fill,
-          color: const Color(0xFF00E5FF).withValues(alpha: 0.7),
+          color: const Color(0xFFE8332B).withValues(alpha: 0.85),
           size: 16,
         ),
         const SizedBox(width: 10),
